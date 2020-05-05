@@ -85,7 +85,12 @@
 		3). 定义一级路由组件: Home/Search/Register/Login
 		4). 创建路由器, 配置路由, 配置路由器
 
+		5). 组件中路由相关的2个对象 (面试问题)
+				$router: 路由器对象, 包含一些用于路由跳转的方法: push()/replace()/back()
+				$route: 当前路由信息对象, 包含当前路由相关数据的对象: path/name/query/params/meta
+
 ## Header组件: 2种路由导航
+
 		1). 声明式: <router-link to="/xxx">
 		2). 编程式: $router.push/replace('/xxx')
 
@@ -108,7 +113,7 @@
 		
 		3). 携带参数的2种方式
 				字符串方式: 将参数手动拼接到path中
-						`/search/${this.keyword}?keyword2=${this.keyword.toUpperCase()}`
+						push(`/search/${this.keyword}?keyword2=${this.keyword.toUpperCase()}`)
 				对象方式: (在开发中用得比较多)
 						this.$router.push({
 							name: 'search', 
@@ -135,23 +140,26 @@
 				可以: 可以将query或且params参数映射成props传递给路由组件对象
 				实现: props: route=>({keyword1:route.params.keyword, keyword2: route.query.keyword })
 
-		8). 面试问题5: 
+		8). 面试问题5(非常重要)
 				描述: 编程式路由跳转到当前路由(参数不变), 会抛出NavigationDuplicated的警告错误
 
-				面试问题: 在做项目时有没有遇到比较难的问题?
+				面试问题: 
+						在做项目时有没有遇到比较难/奇怪的问题?
 				我的问题: 
-						我在上一个项目时没有问题, 后面再做一个新的项目时就有了问题
+						我在上一个项目(3.1.0之前的版本)时没有问题, 后面再做一个新的项目(3.1.0之后的)时就有了问题
 				原因分析: 
 						vue-router3.1.0之后, 引入了push()的promise的语法, 如果没有通过参数指定回调函数就返回一个promise来指定成功/失败的回调, 且内部会判断如果要跳转的路径和参数都没有变化, 会抛出一个失败的promise
 				解决办法:
 						解决1: 在跳转时指定成功或失败的回调函数, 通过catch处理错误
-						解决2: 修正Vue原型上的push和replace方法 (优秀)
+						解决2: 修正(重新定义)Vue原型上的push和replace方法 (优秀)
+				说明:
+						声明式路由跳转之所有没有问题, 是默认传入的成功的空回调函数
 
 ## 解决在二层及以上的路由路径上刷新, 丢失reset样式的问题
-		原因: 
+		1). 原因: 
 				获取页面的路径:　http://localhost:8081/search/atguigu?keyword2=ATGUIGU
 				页面中引入reset: <link rel="stylesheet" href="./css/reset.css"> 
 				请求reset的路径: http://localhost:8081/search/css/reset.css ==>　路径不对
-		解决： 
+		2). 解决： 
 				<link rel="stylesheet" href="/css/reset.css">
 				请求时: http://localhost:8081/css/reset.css
