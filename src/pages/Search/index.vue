@@ -134,20 +134,28 @@ import { mapState } from "vuex";
 import SearchSelector from "./SearchSelector/SearchSelector";
 export default {
   name: "Search",
+  // props: ['keyword3', 'keyword4'],
+
   data() {
     return {
       // 包含所有用于搜索请求的参数数据的对象
       options: {
-        category1Id: "", // 一级分类ID
-        category2Id: "", // 二级分类ID
-        category3Id: "", // 三级分类ID
-        categoryName: "", // 分类名称
-        keyword: "", // 关键字
-        // trademark: '', // 品牌  "ID:品牌名称"
-        props: [], // 商品属性的数组: ["属性ID:属性值:属性名"] 示例: ["2:6.0～6.24英寸:屏幕尺寸"]
-        order: "1:asc", // 排序方式  1: 综合,2: 价格 asc: 升序,desc: 降序  示例: "1:desc"
-        pageNo: 1, // 当前页码
-        pageSize: 10, // 每页数量
+        // 一级分类ID
+        category1Id: "",
+        // 二级分类ID
+        category2Id: "",
+        // 三级分类ID
+        category3Id: "",
+        // 分类名称
+        categoryName: "",
+        // 关键字
+        keyword: "",
+        props: [],
+        order: "1:asc",
+        // 当前页码
+        pageNo: 1,
+        // 每页数量
+        pageSize: 5,
         a: {
           b: 123,
         },
@@ -193,24 +201,7 @@ export default {
     */
   mounted() {
     console.log("Search mounted()");
-    /* this.$store.dispatch('getProductList', {
-        "category3Id": "61",
-        "categoryName": "手机",
-        "keyword": "小米",
-        "order": "1:desc",
-        "pageNo": 1,
-        "pageSize": 10,
-        "props": ["1:1700-2799:价格", "2:6.65-6.74英寸:屏幕尺寸"],
-        "trademark": "4:小米"
-      }) */
-
     this.$store.dispatch("getProductList", this.options);
-
-    /* 
-      const obj1 = {a: 1, b: 2, c: 3}
-      const obj2 = {b: 4, d: 5}
-      const obj3 = {...obj1, ...obj2, d: 6}   // {a: 1, b: 4, c: 3, d: 6}
-      */
   },
 
   methods: {
@@ -324,7 +315,7 @@ export default {
       // 重新获取数据
       // this.$store.dispatch('getProductList', this.options) // 不可以
       // 重新跳转到当前路由, 不再携带query参数, 只携带原本的params参数
-      this.$router.replace(this.$route.path); // $route.path不带query参数, 但带params参数(如果有)
+      this.$router.replace(this.$route.path);
     },
 
     /* 
