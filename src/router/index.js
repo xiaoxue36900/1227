@@ -15,7 +15,7 @@ Vue.use(VueRouter);
 const originPush = VueRouter.prototype.push;
 const originReplace = VueRouter.prototype.replace;
 // 重新指定原型上的push方法
-VueRouter.prototype.push = function (location, onComplete, onAbort) {
+VueRouter.prototype.push = function(location, onComplete, onAbort) {
   console.log("push()", location, onComplete, onAbort);
   // this是路由器对象 $router
   // 如果调用push, 传递了成功或者失败的回调函数
@@ -35,7 +35,7 @@ VueRouter.prototype.push = function (location, onComplete, onAbort) {
   }
 };
 
-VueRouter.prototype.replace = function (location, onComplete, onAbort) {
+VueRouter.prototype.replace = function(location, onComplete, onAbort) {
   if (onComplete || onAbort) {
     originReplace.call(this, location, onComplete, onAbort);
   } else {
@@ -49,4 +49,7 @@ VueRouter.prototype.replace = function (location, onComplete, onAbort) {
 export default new VueRouter({
   mode: "history", // 不带#的模式
   routes, // 配置所有路由
+  scrollBehavior(to, from, savedPosition) {
+    return { x: 0, y: 0 }; // 在跳转路由时, 滚动条自动滚动到x轴和y轴的起始位置
+  },
 });

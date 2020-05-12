@@ -85,9 +85,9 @@
               >
                 <div class="list-wrap">
                   <div class="p-img">
-                    <a href="javascript:">
+                    <router-link :to="`/detail/${goods.id}`">
                       <img :src="goods.defaultImg" />
-                    </a>
+                    </router-link>
                   </div>
                   <div class="price">
                     <strong>
@@ -96,7 +96,9 @@
                     </strong>
                   </div>
                   <div class="attr">
-                    <a href="javascript:">{{ goods.title }}</a>
+                    <router-link :to="`/detail/${goods.id}`">{{
+                      goods.title
+                    }}</router-link>
                   </div>
                   <div class="commit">
                     <i class="command">已有<span>2000</span>人评价</i>
@@ -140,25 +142,16 @@ export default {
     return {
       // 包含所有用于搜索请求的参数数据的对象
       options: {
-        // 一级分类ID
-        category1Id: "",
-        // 二级分类ID
-        category2Id: "",
-        // 三级分类ID
-        category3Id: "",
-        // 分类名称
-        categoryName: "",
-        // 关键字
-        keyword: "",
-        props: [],
-        order: "1:asc",
-        // 当前页码
-        pageNo: 1,
-        // 每页数量
-        pageSize: 5,
-        a: {
-          b: 123,
-        },
+        category1Id: "", // 一级分类ID
+        category2Id: "", // 二级分类ID
+        category3Id: "", // 三级分类ID
+        categoryName: "", // 分类名称
+        keyword: "", // 关键字
+        // trademark: '', // 品牌  "ID:品牌名称"
+        props: [], // 商品属性的数组: ["属性ID:属性值:属性名"] 示例: ["2:6.0～6.24英寸:屏幕尺寸"]
+        order: "1:asc", // 排序方式  1: 综合,2: 价格 asc: 升序,desc: 降序  示例: "1:desc"
+        pageNo: 1, // 当前页码
+        pageSize: 5, // 每页数量
       },
     };
   },
@@ -201,10 +194,37 @@ export default {
     */
   mounted() {
     console.log("Search mounted()");
-    this.$store.dispatch("getProductList", this.options);
+    /* this.$store.dispatch('getProductList', {
+        "category3Id": "61",
+        "categoryName": "手机",
+        "keyword": "小米",
+        "order": "1:desc",
+        "pageNo": 1,
+        "pageSize": 10,
+        "props": ["1:1700-2799:价格", "2:6.65-6.74英寸:屏幕尺寸"],
+        "trademark": "4:小米"
+      }) */
+
+    this.getProductList();
+    /* 
+      const obj1 = {a: 1, b: 2, c: 3}
+      const obj2 = {b: 4, d: 5}
+      const obj3 = {...obj1, ...obj2, d: 6}   // {a: 1, b: 4, c: 3, d: 6}
+      */
   },
 
   methods: {
+    /* 
+      异步获取指定页码的分页商品数据
+      默认指定第1页
+      */
+    getProductList(pageNo = 1) {
+      // 更新options中的pageNo
+      this.options.pageNo = pageNo;
+      // 再dispatch请求获取
+      this.$store.dispatch("getProductList", this.options);
+    },
+
     /* 
       当选择改变当前页码时的事件监听回调
       */
@@ -241,7 +261,7 @@ export default {
       // 设置新的order值
       this.options.order = orderFlag + ":" + orderType;
       // 重新请求显示
-      this.$store.dispatch("getProductList", this.options);
+      this.getProductList();
     },
 
     /* 
@@ -251,7 +271,7 @@ export default {
       // 删除对应的prop
       this.options.props.splice(index, 1);
       // 重新请求数据显示
-      this.$store.dispatch("getProductList", this.options);
+      this.getProductList();
     },
 
     /* 
@@ -269,7 +289,7 @@ export default {
       this.options.props.push(prop);
 
       // 重新请求数据显示
-      this.$store.dispatch("getProductList", this.options);
+      this.getProductList();
     },
 
     /* 
@@ -287,7 +307,7 @@ export default {
       }
 
       // 重新请求获取商品列表显示
-      this.$store.dispatch("getProductList", this.options);
+      this.getProductList();
     },
 
     /* 
@@ -301,6 +321,7 @@ export default {
 
       // 重新请求获取商品列表显示
       // this.$store.dispatch('getProductList', this.options)
+      this.getProductList();
     },
 
     /* 
@@ -315,7 +336,7 @@ export default {
       // 重新获取数据
       // this.$store.dispatch('getProductList', this.options) // 不可以
       // 重新跳转到当前路由, 不再携带query参数, 只携带原本的params参数
-      this.$router.replace(this.$route.path);
+      this.$router.replace(this.$route.path); // $route.path不带query参数, 但带params参数(如果有)
     },
 
     /* 
@@ -341,12 +362,12 @@ export default {
     updateOptions() {
       // 根据query和params更新options
       const {
-        categoryName,
-        category1Id,
-        category2Id,
-        category3Id,
+        categoryName = "",
+        category1Id = "",
+        category2Id = "",
+        category3Id = "",
       } = this.$route.query;
-      const { keyword } = this.$route.params;
+      const { keyword = "" } = this.$route.params;
       this.options = {
         ...this.options,
         categoryName,

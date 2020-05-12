@@ -1,5 +1,4 @@
 <template>
-  <!-- <div class="swiper-container" id="swiper"> -->
   <div class="swiper-container" ref="swiper">
     <div class="swiper-wrapper">
       <div class="swiper-slide" v-for="item in carouselList" :key="item.id">
@@ -27,8 +26,6 @@ export default {
       default: true,
     },
   },
-  // banners ==> [] 创建 ==> [...] 更新
-  // floors ==> [] ==> [...] 创建
   watch: {
     /* 
       监视carouselList变化的回调函数

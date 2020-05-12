@@ -184,7 +184,7 @@ export default {
       显示指定下标的子分类
       */
     // showSubCategorys: _.throttle(function (index) {
-    showSubCategorys: throttle(function (index) {
+    showSubCategorys: throttle(function(index) {
       // console.log('showSubCategorys', index)
       if (this.currentIndex === -2) return; // 如果已经完全移出去了, 不做更新
       // 更新需要显示子分类的下标

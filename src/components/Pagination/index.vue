@@ -104,8 +104,7 @@ export default {
         myCurrentPage,  showPageNo,  totalPages
             4               5             8            23[4]56
         */
-      // start = 4 - Math.floor(5/2)
-      start = myCurrentPage - Math.floor(showPageNo / 2);
+      start = myCurrentPage - Math.floor(showPageNo / 2); // start = 4 - Math.floor(5/2)
       /* 
         myCurrentPage,  showPageNo,  totalPages
             2               5             8            1[2]345
@@ -121,8 +120,7 @@ export default {
         myCurrentPage,  showPageNo,  totalPages
             4               5             8            23[4]56
         */
-      // 2 + 5 - 1
-      end = start + showPageNo - 1;
+      end = start + showPageNo - 1; // 2 + 5 - 1
       /* 
         myCurrentPage,  showPageNo,  totalPages
             7               5             8            456[7]8
@@ -148,13 +146,25 @@ export default {
     },
   },
 
+  watch: {
+    currentPage(value) {
+      // 当父组件改变了其对应的当前页码数据时, 此回调函数就会自动调用
+      // 更新内部的当前页码
+      this.myCurrentPage = value; // 也可以this.currentPage
+    },
+  },
+
   methods: {
     /* 
       设置新的当前页码
       */
-    setCurrentPage(page) {
+    setCurrentPage(currentPage) {
+      // 如果设置的就是当前页码, 直接结束
+      if (currentPage === this.myCurrentPage) return;
       // 一定要是更新自己data中的当前页码, 而不更新接收的currentPage属性
-      this.myCurrentPage = page;
+      this.myCurrentPage = currentPage;
+      // 分发vue自定义事件: 通知父组件, 当前页码变化了
+      this.$emit("currentChange", currentPage);
     },
   },
 };
