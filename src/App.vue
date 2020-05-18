@@ -1,22 +1,25 @@
 <template>
   <div>
-    <Header />
-
+    <Header/>
+    
     <!-- 在此显示当前路由组件 -->
     <router-view></router-view>
-    <Footer v-show="!$route.meta.isHideFooter" />
+
+    <!-- <Footer v-show="$route.path!=='/register' && $route.path!=='/login'"/>  -->
+    <Footer v-show="!$route.meta.isHideFooter"/>
   </div>
 </template>
 
 <script>
-import Header from "@/components/Header";
-import Footer from "@/components/Footer";
-import { reqFloors } from "@/api";
+import Header from '@/components/Header'
+import Footer from '@/components/Footer'
+// import {reqBaseCategoryList, reqLogin} from '@/api'
+import { reqFloors } from '@/api'
 
 export default {
-  name: "App",
+  name: 'App',
 
-  async mounted() {
+  async mounted () {
     // 测试接口请求函数
     // const result = await reqBaseCategoryList()
     // console.log('result', result)
@@ -32,16 +35,18 @@ export default {
     // 测试针对mock接口的vuex代码
     // this.$store.dispatch('getFloors')
     // this.$store.dispatch('getBanners')
-
+    
     // 通过异步action获取异步获取数据到vuex的state中
-    this.$store.dispatch("getBaseCategoryList");
+    this.$store.dispatch('getBaseCategoryList')
   },
 
   components: {
     Header,
-    Footer,
-  },
-};
+    Footer
+  }
+}
 </script>
 
-<style scoped></style>
+<style scoped>
+
+</style>
